@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <!-- Tried "\|textCapWords\|textNoSuggestions" but got error -->
+    <!-- Use Spannable String in code to underline TextView -->
+    
+    <TextView android:id="@+id/location_label" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="@string/location_work_label"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/location_address_street"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/location_address_street"
+        android:inputType="textPostalAddress"
+        android:padding="10dp" />
+
+    <EditText
+        android:id="@+id/location_address_unit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/location_address_unit"
+        android:inputType="textPostalAddress"
+        android:padding="10dp" />
+
+<!--     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        Setting widths to 0dp so that weight is main factor
+        <EditText
+            android:id="@+id/location_address_city"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ems="10"
+            android:hint="@string/location_address_city"
+            android:inputType="textPostalAddress" />
+ 
+        <EditText
+            android:id="@+id/location_address_state"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/location_address_state"            
+            android:inputType="textPostalAddress" /> 
+
+        <Spinner
+            android:id="@+id/location_address_state"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:prompt="@string/location_address_state" />
+
+        <EditText
+            android:id="@+id/location_address_zipcode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/location_address_zipcode"            
+            android:inputType="textPostalAddress" />
+
+    </LinearLayout>
+ -->
+</LinearLayout>
