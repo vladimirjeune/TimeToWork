@@ -4,72 +4,81 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <!-- Tried "\|textCapWords\|textNoSuggestions" but got error -->
+    <!-- Tried "|textCapWords" should be like OR -->
     <!-- Use Spannable String in code to underline TextView -->
     
     <TextView android:id="@+id/location_label" 
-        android:layout_width="wrap_content" 
+        android:layout_width="match_parent" 
         android:layout_height="wrap_content" 
         android:text="@string/location_work_label"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="?android:listSeparatorTextViewStyle" />
 
+        <EditText
+        android:id="@+id/location_address_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/location_address_name"
+        android:textStyle="bold"
+        android:inputType="textPostalAddress|textCapWords"
+        android:paddingTop="10dp" />
+        
     <EditText
         android:id="@+id/location_address_street"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/location_address_street"
-        android:inputType="textPostalAddress"
-        android:padding="10dp" />
+        android:inputType="textPostalAddress|textCapWords" />
 
     <EditText
         android:id="@+id/location_address_unit"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/location_address_unit"
-        android:inputType="textPostalAddress"
-        android:padding="10dp" />
+        android:inputType="textPostalAddress|textCapWords" />
 
-<!--     <LinearLayout
+     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        Setting widths to 0dp so that weight is main factor
+        <!-- Setting widths to 0dp so that weight is main factor -->
         <EditText
             android:id="@+id/location_address_city"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="50"
             android:ems="10"
             android:hint="@string/location_address_city"
-            android:inputType="textPostalAddress" />
+            android:inputType="textPostalAddress|textCapWords" />
  
         <EditText
             android:id="@+id/location_address_state"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="20"
             android:ems="10"
             android:hint="@string/location_address_state"            
-            android:inputType="textPostalAddress" /> 
-
+            android:inputType="textPostalAddress|textCapCharacters" /> 
+<!-- 
         <Spinner
             android:id="@+id/location_address_state"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:prompt="@string/location_address_state" />
+            android:prompt="@string/location_address_state" /> -->
 
         <EditText
             android:id="@+id/location_address_zipcode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="30"
             android:ems="10"
             android:hint="@string/location_address_zipcode"            
-            android:inputType="textPostalAddress" />
+            android:inputType="number" />
 
     </LinearLayout>
- -->
+
 </LinearLayout>

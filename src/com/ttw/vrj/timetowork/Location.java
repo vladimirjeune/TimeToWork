@@ -12,18 +12,37 @@ import java.util.UUID;
  */
 public class Location {
 
-	// TODO: add mIsStarred, mCategory, rest of address stuff.
+	// TODO: mCategory, rest of address stuff.
 	
 	private final UUID mId;
-	private String mLabel;
+	private boolean mIsImportant;
+	private String mName;
 	private String mStreet;
 	private String mUnit;
+	private String mCity;
+	private String mState;
+	private String mZipcode;
 	
 	/**
 	 * CONSTRUCTOR - 
 	 */
 	public Location() {
 		mId = UUID.randomUUID();
+		setIsImportant(false);
+	}
+	
+	/**
+	 * CLEAR - will clear user entered values from this location.
+	 */
+	public void clear() {
+		mIsImportant = false;
+		mName = "";
+		mStreet = "";
+		mUnit = "";
+		mCity = "";
+		mState = "";
+		mZipcode = "";
+			
 	}
 	
 	// TODO: Will have abstract() named Category.  Work(Work,Gym..), Home(Rental, Condo..)
@@ -32,8 +51,8 @@ public class Location {
 	 * GETLABEL - will return the label
 	 * @return the Label
 	 */
-	public String getLabel() {
-		return mLabel;
+	public String getName() {
+		return mName;
 	}
 
 
@@ -42,8 +61,8 @@ public class Location {
 	 * SETLABEL - sets the label for the Location
 	 * @param Label the Label to set
 	 */
-	public void setLabel(String aLabel) {
-		mLabel = aLabel;
+	public void setName(String aName) {
+		mName = aName;
 	}
 
 
@@ -97,6 +116,56 @@ public class Location {
 	}
 
 
+
+	public boolean isImportant() {
+		return mIsImportant;
+	}
+
+	public void setIsImportant(boolean mIsImportant) {
+		this.mIsImportant = mIsImportant;
+	}
+
+	/**
+	 * @return the city
+	 */
+	public String getCity() {
+		return mCity;
+	}
+
+	/**
+	 * @param city the city to set
+	 */
+	public void setCity(String aCity) {
+		mCity = aCity;
+	}
+
+	/**
+	 * @return the state
+	 */
+	public String getState() {
+		return mState;
+	}
+
+	/**
+	 * @param state the state to set
+	 */
+	public void setState(String aState) {
+		mState = aState;
+	}
+
+	/**
+	 * @return the zipcode
+	 */
+	public String getZipcode() {
+		return mZipcode;
+	}
+
+	/**
+	 * @param zipcode the zipcode to set
+	 */
+	public void setZipcode(String aZipcode) {
+		mZipcode = aZipcode;
+	}
 
 	/**
 	 * @param args

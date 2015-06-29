@@ -7,9 +7,10 @@
     <!-- Strings for work address -->
     <string name="location_work_label">Important Location</string>
 
+    <string name="location_address_name">Name</string>
     <string name="location_address_street">Street</string>
     <string name="location_address_unit">Unit</string>
-    <string name="location_address_city">Street</string>
+    <string name="location_address_city">City</string>
     <string name="location_address_state">State</string>
     <string name="location_address_zipcode">Zipcode</string>
 
