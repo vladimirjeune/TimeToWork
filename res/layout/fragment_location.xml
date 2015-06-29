@@ -81,4 +81,42 @@
 
     </LinearLayout>
 
+     <!-- In order to have Delete on the opposite side of the other 2 buttons -->
+     <!-- it was necessary to place them in a LinearLayout with DEL telling -->
+     <!-- its parent to place it left, and the other button's layout telling -->
+     <!-- its children to go right -->
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_marginTop="5dp" >
+
+         <Button
+             android:id="@+id/location_address_delete_btn"
+             style="?android:attr/buttonStyleSmall"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="start"
+             android:text="@string/location_address_delete_btn" />
+
+         <LinearLayout
+             android:layout_width="fill_parent"
+             android:layout_height="match_parent"
+			 android:gravity="end" >
+			 
+             <Button
+                 android:id="@+id/location_address_edit_btn"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/location_address_edit_btn" />
+
+             <Button
+                 android:id="@+id/location_address_save_btn"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/location_address_save_btn" />
+
+         </LinearLayout>
+
+     </LinearLayout>
+
 </LinearLayout>

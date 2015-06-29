@@ -13,5 +13,10 @@
     <string name="location_address_city">City</string>
     <string name="location_address_state">State</string>
     <string name="location_address_zipcode">Zipcode</string>
-
+    
+    <!-- Button Text is ALL CAPS -->
+    <string name="location_address_delete_btn">DELETE</string>
+	<string name="location_address_edit_btn">EDIT</string>
+    <string name="location_address_save_btn">SAVE</string>
+	
 </resources>
