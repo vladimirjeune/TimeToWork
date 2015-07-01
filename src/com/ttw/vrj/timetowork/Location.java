@@ -31,6 +31,21 @@ public class Location {
 		setIsImportant(false);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ": [UID=\"" + mId 
+				+ "\", isStarred=\"" + mIsImportant 
+				+ "\", Name=\"" + mName 
+				+  "\",\nStreet=\"" + mStreet 
+				+ "\", Unit=\"" + mUnit 
+				+ "\", City=\"" + mCity 
+				+ "\",\nState=\"" + mState
+				+ "\", Zipcode=\"" + mZipcode + "]" ;
+	}
+
 	/**
 	 * CLEAR - will clear user entered values from this location.
 	 */
