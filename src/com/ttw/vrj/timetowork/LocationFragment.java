@@ -236,6 +236,51 @@ public class LocationFragment extends Fragment {
 		mZipcodeTextView.setText("");
 		
 	}
+	
+	/**
+	 * SETABILITYBASEDONBUTTON - will enable and disable Views onscreen based on
+	 * 		the View that was just interacted with.  Should be used in Listeners.
+	 * @param v - View most recently interacted with by user.
+	 */
+	private void setAbilityOnInteraction(View v) {
+		
+		if (v.getId() == R.id.location_address_delete_btn) {
+			mDeleteButton.setEnabled(false);  // Must type something to delete it.
+			mSaveButton.setEnabled(false);    // Cannot save a blank location.
+		} else if (v.getId() == R.id.location_address_edit_btn) {	
+			// TODO: Have edit reset blinker to Name.  Enable fields, Have field enable all buttons
+			setFieldsEnabled(true);
+			mDeleteButton.setEnabled(true);
+			mEditButton.setEnabled(true);
+			mSaveButton.setEnabled(true);
+		} else if (v.getId() == R.id.location_address_save_btn) {
+			mSaveButton.setEnabled(false);    // Nothing left to save, but can edit to reenable all
+			mDeleteButton.setEnabled(false);  // If you need delete after save, hit edit 1st
+			
+			// Fields
+			setFieldsEnabled(false);
+			
+		} else {  // Any EditText 
+			mDeleteButton.setEnabled(true);
+			mEditButton.setEnabled(true);
+			mSaveButton.setEnabled(true);
+		}
+		
+		
+	}
+
+	/**
+	 * SETFIELDSENABLED - will set all fields to on or off depending on inputted boolean
+	 * @param aBool - tells whether all fields should be enabled or disabled.
+	 */
+	private void setFieldsEnabled(boolean aBool) {
+		mNameTextView.setEnabled(aBool);
+		mStreetTextView.setEnabled(aBool);
+		mUnitTextView.setEnabled(aBool);
+		mCityTextView.setEnabled(aBool);
+		mStateTextView.setEnabled(aBool);
+		mZipcodeTextView.setEnabled(aBool);
+	}
 
 
 	private class LocationViewClickListener implements View.OnClickListener {
@@ -246,6 +291,8 @@ public class LocationFragment extends Fragment {
 		public void onClick(View v) {
 			Log.d(LOG_TAG, "In onClick()");
 			if (v.getId() == R.id.location_address_delete_btn) {
+
+				setAbilityOnInteraction(v);
 				clear();
 				
 				// TODO: Remove Toast
@@ -253,12 +300,18 @@ public class LocationFragment extends Fragment {
 						, Toast.LENGTH_SHORT).show();
 				
 			} else if (v.getId() == R.id.location_address_edit_btn) {
-				// TODO: Disable Edit button.  Enable SAVE and all fields
+				setAbilityOnInteraction(v);
+				
 				Toast.makeText(getActivity(), "EDIT:\n" + mLocation.toString()
 						, Toast.LENGTH_SHORT).show();
 			} else if (v.getId() == R.id.location_address_save_btn) {
-				// TODO: Disable SAVE button and all fields.  Enable Edit button.
+
 				Log.d(LOG_TAG, "There is a problem in the Save button.");
+				
+				// Save should be disabled until there is a change in the data
+				// Save should disable all view fields
+				setAbilityOnInteraction(v);
+				
 				Toast.makeText(getActivity(), "SAVE:\n" + mLocation.toString()
 						, Toast.LENGTH_SHORT).show();
 			}

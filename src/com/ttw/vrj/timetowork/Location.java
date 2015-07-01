@@ -3,6 +3,7 @@
  */
 package com.ttw.vrj.timetowork;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -10,7 +11,7 @@ import java.util.UUID;
  * @author vladimirjeune
  *
  */
-public class Location {
+public class Location implements Serializable {
 
 	// TODO: mCategory, rest of address stuff.
 	
