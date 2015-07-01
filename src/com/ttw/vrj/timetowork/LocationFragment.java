@@ -82,8 +82,7 @@ public class LocationFragment extends Fragment {
 				.findViewById(R.id.location_address_edit_btn);
 		mSaveButton = (Button) view
 				.findViewById(R.id.location_address_save_btn);
-		
-		
+			
 		// Create Listeners
 		// Fields
 		mNameTextView.addTextChangedListener(new LocationViewTextWatcher(mNameTextView));
@@ -100,7 +99,6 @@ public class LocationFragment extends Fragment {
 		
 		return view;
 	}
-	
 	
 	/**
 	 * CLEARVIEW - will empty all fields of this view and delete field data from 
@@ -141,13 +139,12 @@ public class LocationFragment extends Fragment {
 			// Fields
 			setFieldsEnabled(false);
 			
-		} else {  // Any EditText 
+		} else {  // Any EditText View should enable buttons
 			mDeleteButton.setEnabled(true);
 			mEditButton.setEnabled(true);
 			mSaveButton.setEnabled(true);
 		}
-		
-		
+	
 	}
 
 	/**
@@ -164,6 +161,22 @@ public class LocationFragment extends Fragment {
 	}
 
 
+	/**
+	 * CLEARTHENSETENABLED - makes sure that clear is called first.  Otherwise, clear will cause the 
+	 * 		wrong buttons to be enabled at the wrong time.  The act of clearing modifies the textfields
+	 * 		which enables all buttons.
+	 * @param v
+	 */
+	private void clearThenSetEnabled(View v) {
+		clear();
+		setAbilityOnInteraction(v);
+	}
+
+	/**
+	 * LOCATIONVIEWCLICKLISTENER - ClickListener for all buttons in fragment
+	 * @author vladimirjeune
+	 *
+	 */
 	private class LocationViewClickListener implements View.OnClickListener {
 
 		 private final String LOG_TAG = LocationViewClickListener.class.getSimpleName() ;
@@ -173,8 +186,7 @@ public class LocationFragment extends Fragment {
 			Log.d(LOG_TAG, "In onClick()");
 			if (v.getId() == R.id.location_address_delete_btn) {
 
-				clear();
-				setAbilityOnInteraction(v);
+				clearThenSetEnabled(v);
 				
 				// TODO: Remove Toast
 				Toast.makeText(getActivity(), "DELETE:\n" + mLocation.toString()
@@ -183,14 +195,11 @@ public class LocationFragment extends Fragment {
 			} else if (v.getId() == R.id.location_address_edit_btn) {
 				setAbilityOnInteraction(v);
 				
+				// TODO: Remove Toast
 				Toast.makeText(getActivity(), "EDIT:\n" + mLocation.toString()
 						, Toast.LENGTH_SHORT).show();
 			} else if (v.getId() == R.id.location_address_save_btn) {
 
-				Log.d(LOG_TAG, "There is a problem in the Save button.");
-				
-				// Save should be disabled until there is a change in the data
-				// Save should disable all view fields
 				setAbilityOnInteraction(v);
 				
 				Toast.makeText(getActivity(), "SAVE:\n" + mLocation.toString()
@@ -201,10 +210,20 @@ public class LocationFragment extends Fragment {
 		
 	}
 	
+	
+	/**
+	 * LOCATIONVIEWTEXTWATCHER - TextWatcher for all fields in fragment
+	 * @author vladimirjeune
+	 *
+	 */
 	private class LocationViewTextWatcher implements TextWatcher {
 
 		private View _theView ;
 		
+		/**
+		 * CONSTRUCTOR - 
+		 * @param v - View that caused the event
+		 */
 		LocationViewTextWatcher( View v ) {
 			super();
 			_theView = v;
@@ -213,7 +232,7 @@ public class LocationFragment extends Fragment {
 		@Override
 		public void beforeTextChanged(CharSequence s, int start, int count,
 				int after) {
-			// Unimplemented
+			// Unimplemented on purpose
 		}
 
 		@Override
@@ -242,7 +261,7 @@ public class LocationFragment extends Fragment {
 
 		@Override
 		public void afterTextChanged(Editable s) {
-			// Unimplemented
+			// Unimplemented on purpose
 		}
 		
 	}
