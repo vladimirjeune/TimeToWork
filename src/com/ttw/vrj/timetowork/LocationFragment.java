@@ -85,133 +85,14 @@ public class LocationFragment extends Fragment {
 		
 		
 		// Create Listeners
-		mNameTextView.addTextChangedListener(new TextWatcher() {
+		// Fields
+		mNameTextView.addTextChangedListener(new LocationViewTextWatcher(mNameTextView));
+		mStreetTextView.addTextChangedListener(new LocationViewTextWatcher(mStreetTextView));
+		mUnitTextView.addTextChangedListener(new LocationViewTextWatcher(mUnitTextView));
+		mCityTextView.addTextChangedListener(new LocationViewTextWatcher(mCityTextView));
+		mStateTextView.addTextChangedListener(new LocationViewTextWatcher(mStateTextView));
+		mZipcodeTextView.addTextChangedListener(new LocationViewTextWatcher(mZipcodeTextView));
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// Purposely left blank
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				mLocation.setName(s.toString());  // Set name for Location obj
-				
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// Purposely left blank
-			}
-		});
-
-		mStreetTextView.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// Purposely left blank
-			}
-
-			// TODO:  See getId compare to R.id.#### so can just use if/else.
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				mLocation.setStreet(s.toString());  // Set Street name on Location obj
-				
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// Purposely left blank
-			}
-		});
-
-		mUnitTextView.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// Purposely left blank
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				mLocation.setUnit(s.toString());  // Set Unit if applicable on obj
-				
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// Purposely left blank
-			}
-		});
-		
-		mCityTextView.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// Purposely left blank
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				mLocation.setCity(s.toString());  // Set Unit if applicable on obj
-				
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// Purposely left blank
-			}
-		});
-		
-		mStateTextView.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// Purposely left blank
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				mLocation.setState(s.toString());  // Set Unit if applicable on obj
-				
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// Purposely left blank
-			}
-		});
-		
-		mZipcodeTextView.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// Purposely left blank
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				mLocation.setZipcode(s.toString());  // Set Unit if applicable on obj
-				
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// Purposely left blank
-			}
-		});
-		
 		// Buttons
 		mDeleteButton.setOnClickListener(new LocationViewClickListener());
 		mEditButton.setOnClickListener(new LocationViewClickListener());
@@ -271,15 +152,15 @@ public class LocationFragment extends Fragment {
 
 	/**
 	 * SETFIELDSENABLED - will set all fields to on or off depending on inputted boolean
-	 * @param aBool - tells whether all fields should be enabled or disabled.
+	 * @param isEnabled - tells whether all fields should be enabled or disabled.
 	 */
-	private void setFieldsEnabled(boolean aBool) {
-		mNameTextView.setEnabled(aBool);
-		mStreetTextView.setEnabled(aBool);
-		mUnitTextView.setEnabled(aBool);
-		mCityTextView.setEnabled(aBool);
-		mStateTextView.setEnabled(aBool);
-		mZipcodeTextView.setEnabled(aBool);
+	private void setFieldsEnabled(boolean isEnabled) {
+		mNameTextView.setEnabled(isEnabled);
+		mStreetTextView.setEnabled(isEnabled);
+		mUnitTextView.setEnabled(isEnabled);
+		mCityTextView.setEnabled(isEnabled);
+		mStateTextView.setEnabled(isEnabled);
+		mZipcodeTextView.setEnabled(isEnabled);
 	}
 
 
@@ -292,8 +173,8 @@ public class LocationFragment extends Fragment {
 			Log.d(LOG_TAG, "In onClick()");
 			if (v.getId() == R.id.location_address_delete_btn) {
 
-				setAbilityOnInteraction(v);
 				clear();
+				setAbilityOnInteraction(v);
 				
 				// TODO: Remove Toast
 				Toast.makeText(getActivity(), "DELETE:\n" + mLocation.toString()
@@ -316,6 +197,52 @@ public class LocationFragment extends Fragment {
 						, Toast.LENGTH_SHORT).show();
 			}
 			
+		}
+		
+	}
+	
+	private class LocationViewTextWatcher implements TextWatcher {
+
+		private View _theView ;
+		
+		LocationViewTextWatcher( View v ) {
+			super();
+			_theView = v;
+		}
+		
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+			// Unimplemented
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			
+			// If user enters data allow him to save/clear it.
+			setFieldsEnabled(true);
+			setAbilityOnInteraction(_theView);  // Non Button View will turn buttons on
+			
+			if (_theView.getId() == R.id.location_address_name) {
+				mLocation.setName(s.toString());
+			} else if (_theView.getId() == R.id.location_address_street) {
+				mLocation.setStreet(s.toString());
+			} else if (_theView.getId() == R.id.location_address_unit) {
+				mLocation.setUnit(s.toString());
+			} else if (_theView.getId() == R.id.location_address_city) {
+				mLocation.setCity(s.toString());
+			} else if (_theView.getId() == R.id.location_address_state) {
+				mLocation.setState(s.toString());
+			} else if (_theView.getId() == R.id.location_address_zipcode) {
+				mLocation.setZipcode(s.toString());
+			} 
+			
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+			// Unimplemented
 		}
 		
 	}

@@ -16,13 +16,13 @@ public class Location implements Serializable {
 	// TODO: mCategory, rest of address stuff.
 	
 	private final UUID mId;
-	private boolean mIsImportant;
-	private String mName;
-	private String mStreet;
-	private String mUnit;
-	private String mCity;
-	private String mState;
-	private String mZipcode;
+	private boolean mIsImportant;  // Will default to false
+	private String mName="";
+	private String mStreet="";
+	private String mUnit="";
+	private String mCity="";
+	private String mState="";
+	private String mZipcode="";
 	
 	/**
 	 * CONSTRUCTOR - 
