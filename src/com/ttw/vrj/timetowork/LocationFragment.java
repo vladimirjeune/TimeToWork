@@ -33,7 +33,7 @@ public class LocationFragment extends Fragment {
 	private EditText mZipcodeTextView;
 	
 	// Buttons
-	private Button mDeleteButton;
+	private Button mClearButton;
 	private Button mEditButton;
 	private Button mSaveButton;
 	
@@ -76,8 +76,8 @@ public class LocationFragment extends Fragment {
 		mZipcodeTextView = (EditText) view
 				.findViewById(R.id.location_address_zipcode);
 		
-		mDeleteButton = (Button) view
-				.findViewById(R.id.location_address_delete_btn);
+		mClearButton = (Button) view
+				.findViewById(R.id.location_address_clear_btn);
 		mEditButton = (Button) view
 				.findViewById(R.id.location_address_edit_btn);
 		mSaveButton = (Button) view
@@ -93,7 +93,7 @@ public class LocationFragment extends Fragment {
 		mZipcodeTextView.addTextChangedListener(new LocationViewTextWatcher(mZipcodeTextView));
 
 		// Buttons
-		mDeleteButton.setOnClickListener(new LocationViewClickListener());
+		mClearButton.setOnClickListener(new LocationViewClickListener());
 		mEditButton.setOnClickListener(new LocationViewClickListener());
 		mSaveButton.setOnClickListener(new LocationViewClickListener());
 		
@@ -123,24 +123,24 @@ public class LocationFragment extends Fragment {
 	 */
 	private void setAbilityOnInteraction(View v) {
 		
-		if (v.getId() == R.id.location_address_delete_btn) {
-			mDeleteButton.setEnabled(false);  // Must type something to delete it.
+		if (v.getId() == R.id.location_address_clear_btn) {
+			mClearButton.setEnabled(false);  // Must type something to delete it.
 			mSaveButton.setEnabled(false);    // Cannot save a blank location.
 		} else if (v.getId() == R.id.location_address_edit_btn) {	
 			// TODO: Have edit reset blinker to Name.  Enable fields, Have field enable all buttons
 			setFieldsEnabled(true);
-			mDeleteButton.setEnabled(true);
+			mClearButton.setEnabled(true);
 			mEditButton.setEnabled(true);
 			mSaveButton.setEnabled(true);
 		} else if (v.getId() == R.id.location_address_save_btn) {
 			mSaveButton.setEnabled(false);    // Nothing left to save, but can edit to reenable all
-			mDeleteButton.setEnabled(false);  // If you need delete after save, hit edit 1st
+			mClearButton.setEnabled(false);  // If you need delete after save, hit edit 1st
 			
 			// Fields
 			setFieldsEnabled(false);
 			
 		} else {  // Any EditText View should enable buttons
-			mDeleteButton.setEnabled(true);
+			mClearButton.setEnabled(true);
 			mEditButton.setEnabled(true);
 			mSaveButton.setEnabled(true);
 		}
@@ -184,7 +184,7 @@ public class LocationFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			Log.d(LOG_TAG, "In onClick()");
-			if (v.getId() == R.id.location_address_delete_btn) {
+			if (v.getId() == R.id.location_address_clear_btn) {
 
 				clearThenSetEnabled(v);
 				

@@ -4,7 +4,7 @@
     <string name="app_name">TimeToWork</string>
     <string name="action_settings">Settings</string>
     
-    <!-- Strings for work address -->
+    <!-- Strings for work address(es) -->
     <string name="location_work_label">Important Location</string>
 
     <string name="location_address_name">Name</string>
@@ -15,7 +15,7 @@
     <string name="location_address_zipcode">Zipcode</string>
     
     <!-- Button Text is ALL CAPS -->
-    <string name="location_address_delete_btn">DELETE</string>
+    <string name="location_address_clear_btn">CLEAR</string>
 	<string name="location_address_edit_btn">EDIT</string>
     <string name="location_address_save_btn">SAVE</string>
 	

@@ -91,12 +91,12 @@
          android:layout_marginTop="5dp" >
 
          <Button
-             android:id="@+id/location_address_delete_btn"
+             android:id="@+id/location_address_clear_btn"
              style="?android:attr/buttonStyleSmall"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_gravity="start"
-             android:text="@string/location_address_delete_btn" />
+             android:text="@string/location_address_clear_btn" />
 
          <LinearLayout
              android:layout_width="fill_parent"
