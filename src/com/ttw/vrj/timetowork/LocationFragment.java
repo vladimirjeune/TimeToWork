@@ -36,6 +36,8 @@ public class LocationFragment extends Fragment {
 	private Button mClearButton;
 	private Button mEditButton;
 	private Button mSaveButton;
+
+	private Button mNextButton;
 	
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
@@ -82,6 +84,8 @@ public class LocationFragment extends Fragment {
 				.findViewById(R.id.location_address_edit_btn);
 		mSaveButton = (Button) view
 				.findViewById(R.id.location_address_save_btn);
+		mNextButton = (Button) view
+				.findViewById(R.id.location_address_next_btn);
 			
 		// Create Listeners
 		// Fields
@@ -96,6 +100,7 @@ public class LocationFragment extends Fragment {
 		mClearButton.setOnClickListener(new LocationViewClickListener());
 		mEditButton.setOnClickListener(new LocationViewClickListener());
 		mSaveButton.setOnClickListener(new LocationViewClickListener());
+		mNextButton.setOnClickListener(new LocationViewClickListener());
 		
 		return view;
 	}
@@ -126,18 +131,21 @@ public class LocationFragment extends Fragment {
 		if (v.getId() == R.id.location_address_clear_btn) {
 			mClearButton.setEnabled(false);  // Must type something to delete it.
 			mSaveButton.setEnabled(false);    // Cannot save a blank location.
+			mNextButton.setEnabled(false);
 		} else if (v.getId() == R.id.location_address_edit_btn) {	
 			// TODO: Have edit reset blinker to Name.  Enable fields, Have field enable all buttons
 			setFieldsEnabled(true);
 			mClearButton.setEnabled(true);
 			mEditButton.setEnabled(true);
 			mSaveButton.setEnabled(true);
+			mNextButton.setEnabled(false);
 		} else if (v.getId() == R.id.location_address_save_btn) {
 			mSaveButton.setEnabled(false);    // Nothing left to save, but can edit to reenable all
 			mClearButton.setEnabled(false);  // If you need delete after save, hit edit 1st
+			mNextButton.setEnabled(true);
 			
 			// Fields
-			setFieldsEnabled(false);
+			setFieldsEnabled(false);		
 			
 		} else {  // Any EditText View should enable buttons
 			mClearButton.setEnabled(true);
@@ -204,6 +212,12 @@ public class LocationFragment extends Fragment {
 				
 				Toast.makeText(getActivity(), "SAVE:\n" + mLocation.toString()
 						, Toast.LENGTH_SHORT).show();
+			} else if (v.getId() == R.id.location_address_next_btn) {
+				// TODO:  Next needs to go to the Next activity
+				
+				Toast.makeText(getActivity(), "NEXT:\n" + mLocation.toString()
+						, Toast.LENGTH_SHORT).show();
+				
 			}
 			
 		}

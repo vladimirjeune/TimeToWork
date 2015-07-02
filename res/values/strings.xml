@@ -18,5 +18,6 @@
     <string name="location_address_clear_btn">CLEAR</string>
 	<string name="location_address_edit_btn">EDIT</string>
     <string name="location_address_save_btn">SAVE</string>
+    <string name="location_address_next_btn">NEXT</string>
 	
 </resources>
