@@ -3,6 +3,11 @@
  */
 package com.ttw.vrj.timetowork;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -21,6 +26,11 @@ import android.widget.Toast;
  */
 public class LocationFragment extends Fragment {
 
+	private static final String LOG_TAG = LocationFragment.class.getSimpleName();
+	private final String KEY_INDEX =  LocationFragment.class.getSimpleName() + ": enabledStates";
+	private List<View> viewList;
+	HashMap<Integer, Boolean> _enabled_m;
+	
 	// Main Object
 	private Location mLocation;
 	
@@ -46,10 +56,12 @@ public class LocationFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mLocation = new Location();
+		viewList = new ArrayList<View>();
+		_enabled_m = null;
 	}
 
 	/**
-	 * ONCREATE - where you inflate the layout for the Fragment's View.  Then return
+	 * ONCREATEVIEW - where you inflate the layout for the Fragment's View.  Then return
 	 * 	it to the hosting Activity.
 	 * @see android.support.v4.app.
 	 * 		Fragment#onCreateView(android.view.LayoutInflater
@@ -58,34 +70,48 @@ public class LocationFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
+		if (savedInstanceState != null) {
+			Log.i(LOG_TAG, "onCreate():\n"+savedInstanceState.toString());
+		}
 		
 		// Last parameter tells layout inflater whether to add inflated view to parent.
 		// We will do it in the Activity's code
 		View view = (View) inflater.inflate(R.layout.fragment_location
 				, container, false);
 		
-		// Obtain UI Element Values
+		// Obtain UI Element Values and store for rotation
 		mNameTextView = (EditText) view
 				.findViewById(R.id.location_address_name);
+		viewList.add(mNameTextView);
 		mStreetTextView = (EditText) view
 				.findViewById(R.id.location_address_street);
+		viewList.add(mStreetTextView);
 		mUnitTextView = (EditText) view
 				.findViewById(R.id.location_address_unit);
+		viewList.add(mUnitTextView);
 		mCityTextView = (EditText) view
 				.findViewById(R.id.location_address_city);
+		viewList.add(mCityTextView);
 		mStateTextView = (EditText) view
 				.findViewById(R.id.location_address_state);
+		viewList.add(mStateTextView);
 		mZipcodeTextView = (EditText) view
 				.findViewById(R.id.location_address_zipcode);
+		viewList.add(mZipcodeTextView);
 		
 		mClearButton = (Button) view
 				.findViewById(R.id.location_address_clear_btn);
+		viewList.add(mClearButton);
 		mEditButton = (Button) view
 				.findViewById(R.id.location_address_edit_btn);
+		viewList.add(mEditButton);
 		mSaveButton = (Button) view
 				.findViewById(R.id.location_address_save_btn);
+		viewList.add(mSaveButton);
 		mNextButton = (Button) view
 				.findViewById(R.id.location_address_next_btn);
+		viewList.add(mNextButton);
 			
 		// Create Listeners
 		// Fields
@@ -102,9 +128,82 @@ public class LocationFragment extends Fragment {
 		mSaveButton.setOnClickListener(new LocationViewClickListener());
 		mNextButton.setOnClickListener(new LocationViewClickListener());
 		
+		// Set or reset the enabled states
+//		setAbilityOnCreateView(savedInstanceState);  // TODO:  Look lifecycle, see if work elsewhere
+		getEnabledStatesFromBundleIfAvailable(savedInstanceState);
+		
+		Log.d(LOG_TAG, "onCreate():\n"+mClearButton.isEnabled()+"");
+		
 		return view;
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onSaveInstanceState(android.os.Bundle)
+	 */
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		_enabled_m = new HashMap<Integer, Boolean>();  // HashMaps are serializable
+		
+		// Gathering enabled state of all Views
+		for (View v: viewList) {
+			_enabled_m.put(v.getId(), v.isEnabled());
+		}
+		
+		// Save enabled state for reconstruction
+		outState.putSerializable(KEY_INDEX, _enabled_m);
+		
+	}
+
+	/**
+	 * GETENABLEDSTATESFROMBUNDLEIFAVAILABLE - will get the previous Enabled States of the Fragment
+	 * 		after rotation, if the Bundle exists.  Value will be used in onStart().
+	 * 		If Bundle not available, value will be null.
+	 */
+	private void getEnabledStatesFromBundleIfAvailable(Bundle savedInstanceState) {
+		
+		if (savedInstanceState == null) {
+			_enabled_m = null;
+		} else if (savedInstanceState.containsKey(KEY_INDEX)) {  // In case View not there in this orientation
+			_enabled_m = ((HashMap<Integer, Boolean>) savedInstanceState.getSerializable(KEY_INDEX));
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
+	 */
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		
+		if (savedInstanceState != null) {
+//			Log.w(LOG_TAG, "onActivity():\n"+savedInstanceState.toString());
+			Log.w(LOG_TAG, "onCreate():\n"+mClearButton.isEnabled()+"");
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onViewCreated(android.view.View, android.os.Bundle)
+	 */
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onViewCreated(view, savedInstanceState);
+		Log.w(LOG_TAG, "onViewCreated():\n"+mClearButton.isEnabled()+"");
+	}
+
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onStart()
+	 */
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		setAbilitiesOnStart();  // UI is ready, so set/reset enabled
+		Log.w(LOG_TAG, "onStart():\n"+mClearButton.isEnabled()+"");
+	}
+
 	/**
 	 * CLEARVIEW - will empty all fields of this view and delete field data from 
 	 * 		backing object.
@@ -118,6 +217,57 @@ public class LocationFragment extends Fragment {
 		mCityTextView.setText("");
 		mStateTextView.setText("");
 		mZipcodeTextView.setText("");
+		
+	}
+	
+	/**
+	 * SETABILITYONCREATEVIEW - to be used in onCreateView() to set the initial state
+	 * 		of the buttons the first time the user goes to the page.  And the previous
+	 * 		state of the buttons if the Fragment is being reconstructed after rotation. 
+	 * @param savedInstanceState
+	 */
+	private void setAbilityOnCreateView(Bundle savedInstanceState) {
+		
+		if (savedInstanceState == null) {
+			mClearButton.setEnabled(false);
+			mSaveButton.setEnabled(false);
+			mNextButton.setEnabled(false);
+		} else if (true == savedInstanceState.containsKey(KEY_INDEX)) {
+			Map<Integer, Boolean> savedEnableState_m = ((Map<Integer, Boolean>) 
+					savedInstanceState.getSerializable(KEY_INDEX));
+
+			for (View v : viewList) {
+				// Just in case available views have changed for new orientation
+				if (savedEnableState_m.containsKey(v.getId())) {  
+					v.setEnabled(savedEnableState_m.get(v.getId()));
+				}
+			}
+
+		}
+		
+	}
+
+	/**
+	 * SETABILITIESONSTART - to be used in onStart() to set the initial state
+	 * 		of the buttons the first time the user goes to the page.  And the previous
+	 * 		state of the buttons if the Fragment is being reconstructed after rotation. 
+	 */
+	private void setAbilitiesOnStart() {
+		
+		if (_enabled_m == null) {
+			mClearButton.setEnabled(false);
+			mSaveButton.setEnabled(false);
+			mNextButton.setEnabled(false);
+		} else {
+
+			for (View v : viewList) {
+				// Just in case available views have changed for new orientation
+				if (_enabled_m.containsKey(v.getId())) {  
+					v.setEnabled(_enabled_m.get(v.getId()));
+				}
+			}
+
+		}
 		
 	}
 	
@@ -147,10 +297,11 @@ public class LocationFragment extends Fragment {
 			// Fields
 			setFieldsEnabled(false);		
 			
-		} else {  // Any EditText View should enable buttons
+		} else {  // Any EditText View should enable these buttons
 			mClearButton.setEnabled(true);
 			mEditButton.setEnabled(true);
 			mSaveButton.setEnabled(true);
+			Log.i(LOG_TAG, "Any EditText View should enable those buttons");
 		}
 	
 	}
@@ -264,6 +415,7 @@ public class LocationFragment extends Fragment {
 			} else if (_theView.getId() == R.id.location_address_unit) {
 				mLocation.setUnit(s.toString());
 			} else if (_theView.getId() == R.id.location_address_city) {
+				Log.i("LocationFragment", "City is being done: " + R.id.location_address_city + ": " + s);
 				mLocation.setCity(s.toString());
 			} else if (_theView.getId() == R.id.location_address_state) {
 				mLocation.setState(s.toString());
