@@ -148,6 +148,15 @@ public class LocationFragment extends Fragment {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onStart()
+	 */
+	@Override
+	public void onStart() {
+		super.onStart();
+		setAbilitiesOnStart();  // UI is ready, so set/reset enabled
+	}
+
 	/**
 	 * GETENABLEDSTATESFROMBUNDLEIFAVAILABLE - will get the previous Enabled States of the Fragment
 	 * 		after rotation, if the Bundle exists.  Value will be used in onStart().
@@ -162,16 +171,6 @@ public class LocationFragment extends Fragment {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onStart()
-	 */
-	@Override
-	public void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		setAbilitiesOnStart();  // UI is ready, so set/reset enabled
-	}
-
 	/**
 	 * CLEARVIEW - will empty all fields of this view and delete field data from 
 	 * 		backing object.
@@ -188,32 +187,7 @@ public class LocationFragment extends Fragment {
 		
 	}
 	
-	/**
-	 * SETABILITYONCREATEVIEW - to be used in onCreateView() to set the initial state
-	 * 		of the buttons the first time the user goes to the page.  And the previous
-	 * 		state of the buttons if the Fragment is being reconstructed after rotation. 
-	 * @param savedInstanceState
-	 */
-	private void setAbilityOnCreateView(Bundle savedInstanceState) {
-		
-		if (savedInstanceState == null) {
-			mClearButton.setEnabled(false);
-			mSaveButton.setEnabled(false);
-			mNextButton.setEnabled(false);
-		} else if (true == savedInstanceState.containsKey(KEY_INDEX)) {
-			Map<Integer, Boolean> savedEnableState_m = ((Map<Integer, Boolean>) 
-					savedInstanceState.getSerializable(KEY_INDEX));
 
-			for (View v : viewList) {
-				// Just in case available views have changed for new orientation
-				if (savedEnableState_m.containsKey(v.getId())) {  
-					v.setEnabled(savedEnableState_m.get(v.getId()));
-				}
-			}
-
-		}
-		
-	}
 
 	/**
 	 * SETABILITIESONSTART - to be used in onStart() to set the initial state
