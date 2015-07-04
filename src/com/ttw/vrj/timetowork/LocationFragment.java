@@ -29,7 +29,7 @@ public class LocationFragment extends Fragment {
 	private static final String LOG_TAG = LocationFragment.class.getSimpleName();
 	private final String KEY_INDEX =  LocationFragment.class.getSimpleName() + ": enabledStates";
 	private List<View> viewList;
-	HashMap<Integer, Boolean> _enabled_m;
+	private HashMap<Integer, Boolean> _enabled_m;
 	
 	// Main Object
 	private Location mLocation;
@@ -71,10 +71,6 @@ public class LocationFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		if (savedInstanceState != null) {
-			Log.i(LOG_TAG, "onCreate():\n"+savedInstanceState.toString());
-		}
-		
 		// Last parameter tells layout inflater whether to add inflated view to parent.
 		// We will do it in the Activity's code
 		View view = (View) inflater.inflate(R.layout.fragment_location
@@ -129,10 +125,7 @@ public class LocationFragment extends Fragment {
 		mNextButton.setOnClickListener(new LocationViewClickListener());
 		
 		// Set or reset the enabled states
-//		setAbilityOnCreateView(savedInstanceState);  // TODO:  Look lifecycle, see if work elsewhere
 		getEnabledStatesFromBundleIfAvailable(savedInstanceState);
-		
-		Log.d(LOG_TAG, "onCreate():\n"+mClearButton.isEnabled()+"");
 		
 		return view;
 	}
@@ -170,30 +163,6 @@ public class LocationFragment extends Fragment {
 	}
 	
 	/* (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onActivityCreated(android.os.Bundle)
-	 */
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onActivityCreated(savedInstanceState);
-		
-		if (savedInstanceState != null) {
-//			Log.w(LOG_TAG, "onActivity():\n"+savedInstanceState.toString());
-			Log.w(LOG_TAG, "onCreate():\n"+mClearButton.isEnabled()+"");
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onViewCreated(android.view.View, android.os.Bundle)
-	 */
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onViewCreated(view, savedInstanceState);
-		Log.w(LOG_TAG, "onViewCreated():\n"+mClearButton.isEnabled()+"");
-	}
-
-	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onStart()
 	 */
 	@Override
@@ -201,7 +170,6 @@ public class LocationFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onStart();
 		setAbilitiesOnStart();  // UI is ready, so set/reset enabled
-		Log.w(LOG_TAG, "onStart():\n"+mClearButton.isEnabled()+"");
 	}
 
 	/**
@@ -301,7 +269,6 @@ public class LocationFragment extends Fragment {
 			mClearButton.setEnabled(true);
 			mEditButton.setEnabled(true);
 			mSaveButton.setEnabled(true);
-			Log.i(LOG_TAG, "Any EditText View should enable those buttons");
 		}
 	
 	}
@@ -342,7 +309,6 @@ public class LocationFragment extends Fragment {
 		
 		@Override
 		public void onClick(View v) {
-			Log.d(LOG_TAG, "In onClick()");
 			if (v.getId() == R.id.location_address_clear_btn) {
 
 				clearThenSetEnabled(v);
@@ -415,7 +381,6 @@ public class LocationFragment extends Fragment {
 			} else if (_theView.getId() == R.id.location_address_unit) {
 				mLocation.setUnit(s.toString());
 			} else if (_theView.getId() == R.id.location_address_city) {
-				Log.i("LocationFragment", "City is being done: " + R.id.location_address_city + ": " + s);
 				mLocation.setCity(s.toString());
 			} else if (_theView.getId() == R.id.location_address_state) {
 				mLocation.setState(s.toString());
