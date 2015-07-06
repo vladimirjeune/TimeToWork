@@ -54,21 +54,12 @@
             android:hint="@string/location_address_city"
             android:inputType="textPostalAddress|textCapWords" />
  
-        <EditText
-            android:id="@+id/location_address_state"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="20"
-            android:ems="10"
-            android:hint="@string/location_address_state"            
-            android:inputType="textPostalAddress|textCapCharacters" /> 
-<!-- 
         <Spinner
             android:id="@+id/location_address_state"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:prompt="@string/location_address_state" /> -->
+            android:layout_weight="20"
+            android:prompt="@string/location_address_state" />
 
         <EditText
             android:id="@+id/location_address_zipcode"

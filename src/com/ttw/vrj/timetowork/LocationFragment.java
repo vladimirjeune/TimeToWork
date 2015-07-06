@@ -6,18 +6,19 @@ package com.ttw.vrj.timetowork;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 /**
@@ -34,12 +35,12 @@ public class LocationFragment extends Fragment {
 	// Main Object
 	private Location mLocation;
 	
-	// Editable Text Views
+	// Editable Views
 	private EditText mNameTextView;
 	private EditText mStreetTextView;
 	private EditText mUnitTextView;
 	private EditText mCityTextView;
-	private EditText mStateTextView;
+	private Spinner mStateSpinnerView;
 	private EditText mZipcodeTextView;
 	
 	// Buttons
@@ -56,7 +57,7 @@ public class LocationFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mLocation = new Location();
-		viewList = new ArrayList<View>();
+		viewList = new ArrayList<View>();  // Holds views for collection of state later
 		_enabled_m = null;
 	}
 
@@ -89,12 +90,13 @@ public class LocationFragment extends Fragment {
 		mCityTextView = (EditText) view
 				.findViewById(R.id.location_address_city);
 		viewList.add(mCityTextView);
-		mStateTextView = (EditText) view
-				.findViewById(R.id.location_address_state);
-		viewList.add(mStateTextView);
 		mZipcodeTextView = (EditText) view
 				.findViewById(R.id.location_address_zipcode);
 		viewList.add(mZipcodeTextView);
+		
+		// Spinners
+		mStateSpinnerView = (Spinner) view.findViewById(R.id.location_address_state);
+		viewList.add(mStateSpinnerView);
 		
 		mClearButton = (Button) view
 				.findViewById(R.id.location_address_clear_btn);
@@ -109,15 +111,43 @@ public class LocationFragment extends Fragment {
 				.findViewById(R.id.location_address_next_btn);
 		viewList.add(mNextButton);
 			
+
 		// Create Listeners
 		// Fields
 		mNameTextView.addTextChangedListener(new LocationViewTextWatcher(mNameTextView));
 		mStreetTextView.addTextChangedListener(new LocationViewTextWatcher(mStreetTextView));
 		mUnitTextView.addTextChangedListener(new LocationViewTextWatcher(mUnitTextView));
 		mCityTextView.addTextChangedListener(new LocationViewTextWatcher(mCityTextView));
-		mStateTextView.addTextChangedListener(new LocationViewTextWatcher(mStateTextView));
 		mZipcodeTextView.addTextChangedListener(new LocationViewTextWatcher(mZipcodeTextView));
 
+		// Spinners
+		ArrayAdapter<CharSequence> stateArrayAdapter = ArrayAdapter
+				.createFromResource(getActivity(), R.array.states_array
+						, android.R.layout.simple_spinner_item);
+		
+		// Layout to use for List of Choices
+		stateArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		// Apply Adapter to Spinner
+		mStateSpinnerView.setAdapter(stateArrayAdapter);
+		
+		// Setting Spinner Listener
+		mStateSpinnerView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				mLocation.setState((String) parent.getItemAtPosition(position) );
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// Purposely left blank				
+			}
+			
+		});
+		
+		
 		// Buttons
 		mClearButton.setOnClickListener(new LocationViewClickListener());
 		mEditButton.setOnClickListener(new LocationViewClickListener());
@@ -182,7 +212,7 @@ public class LocationFragment extends Fragment {
 		mStreetTextView.setText("");
 		mUnitTextView.setText("");
 		mCityTextView.setText("");
-		mStateTextView.setText("");
+		mStateSpinnerView.setSelection(0);  // 0 should be empty.  Meaning no selection
 		mZipcodeTextView.setText("");
 		
 	}
@@ -225,12 +255,12 @@ public class LocationFragment extends Fragment {
 			mSaveButton.setEnabled(false);    // Cannot save a blank location.
 			mNextButton.setEnabled(false);
 		} else if (v.getId() == R.id.location_address_edit_btn) {	
-			// TODO: Have edit reset blinker to Name.  Enable fields, Have field enable all buttons
+			// TODO: Have edit reset blinker to Name.
 			setFieldsEnabled(true);
 			mClearButton.setEnabled(true);
 			mEditButton.setEnabled(true);
 			mSaveButton.setEnabled(true);
-			mNextButton.setEnabled(false);
+			mNextButton.setEnabled(false);  // Do not want to move until data set.
 		} else if (v.getId() == R.id.location_address_save_btn) {
 			mSaveButton.setEnabled(false);    // Nothing left to save, but can edit to reenable all
 			mClearButton.setEnabled(false);  // If you need delete after save, hit edit 1st
@@ -256,7 +286,7 @@ public class LocationFragment extends Fragment {
 		mStreetTextView.setEnabled(isEnabled);
 		mUnitTextView.setEnabled(isEnabled);
 		mCityTextView.setEnabled(isEnabled);
-		mStateTextView.setEnabled(isEnabled);
+		mStateSpinnerView.setEnabled(isEnabled);
 		mZipcodeTextView.setEnabled(isEnabled);
 	}
 
@@ -264,7 +294,7 @@ public class LocationFragment extends Fragment {
 	/**
 	 * CLEARTHENSETENABLED - makes sure that clear is called first.  Otherwise, clear will cause the 
 	 * 		wrong buttons to be enabled at the wrong time.  The act of clearing modifies the textfields
-	 * 		which enables all buttons.
+	 * 		which enables most buttons.
 	 * @param v
 	 */
 	private void clearThenSetEnabled(View v) {
@@ -356,8 +386,6 @@ public class LocationFragment extends Fragment {
 				mLocation.setUnit(s.toString());
 			} else if (_theView.getId() == R.id.location_address_city) {
 				mLocation.setCity(s.toString());
-			} else if (_theView.getId() == R.id.location_address_state) {
-				mLocation.setState(s.toString());
 			} else if (_theView.getId() == R.id.location_address_zipcode) {
 				mLocation.setZipcode(s.toString());
 			} 
