@@ -5,8 +5,6 @@
     android:orientation="vertical" >
 
     <!-- Tried "|textCapWords" should be like OR -->
-    <!-- Use Spannable String in code to underline TextView -->
-    
     <TextView android:id="@+id/location_label" 
         android:layout_width="match_parent" 
         android:layout_height="wrap_content" 
@@ -14,15 +12,31 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         style="?android:listSeparatorTextViewStyle" />
 
-    <EditText
-        android:id="@+id/location_address_name"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/location_address_name"
-        android:textStyle="bold"
-        android:inputType="textPostalAddress|textCapWords"
-        android:paddingTop="10dp" />
+        android:layout_height="wrap_content" >
+
+        <CheckBox
+            android:id="@+id/location_address_important"
+            android:button="@drawable/btn_star_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <EditText
+            android:id="@+id/location_address_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/location_address_name"
+            android:inputType="textPostalAddress|textCapWords"
+            android:paddingTop="10dp"
+            android:textStyle="bold" >
+
+            <requestFocus />
+        </EditText>
+
+    </LinearLayout>
         
     <EditText
         android:id="@+id/location_address_street"

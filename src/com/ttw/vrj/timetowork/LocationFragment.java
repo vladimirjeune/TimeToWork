@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ public class LocationFragment extends Fragment {
 
 	private static final String LOG_TAG = LocationFragment.class.getSimpleName();
 	private final String KEY_INDEX =  LocationFragment.class.getSimpleName() + ": enabledStates";
+	private final String CHECKBOX_INDEX = LocationFragment.class.getSimpleName() + ": checkBoxState";
 	private List<View> viewList;
 	private HashMap<Integer, Boolean> _enabled_m;
 	
@@ -44,6 +46,8 @@ public class LocationFragment extends Fragment {
 	private EditText mZipcodeTextView;
 	
 	// Buttons
+	private CheckBox mIsImportant;
+
 	private Button mClearButton;
 	private Button mEditButton;
 	private Button mSaveButton;
@@ -98,6 +102,10 @@ public class LocationFragment extends Fragment {
 		mStateSpinnerView = (Spinner) view.findViewById(R.id.location_address_state);
 		viewList.add(mStateSpinnerView);
 		
+		// Buttons
+		mIsImportant = (CheckBox) view
+				.findViewById(R.id.location_address_important);
+		viewList.add(mIsImportant);
 		mClearButton = (Button) view
 				.findViewById(R.id.location_address_clear_btn);
 		viewList.add(mClearButton);
@@ -149,6 +157,7 @@ public class LocationFragment extends Fragment {
 		
 		
 		// Buttons
+		mIsImportant.setOnClickListener(new LocationViewClickListener());
 		mClearButton.setOnClickListener(new LocationViewClickListener());
 		mEditButton.setOnClickListener(new LocationViewClickListener());
 		mSaveButton.setOnClickListener(new LocationViewClickListener());
@@ -156,9 +165,11 @@ public class LocationFragment extends Fragment {
 		
 		// Set or reset the enabled states
 		getEnabledStatesFromBundleIfAvailable(savedInstanceState);
-		
+		getObjectStatesFromBundleIfAvailable(savedInstanceState);
+
 		return view;
 	}
+
 	
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onSaveInstanceState(android.os.Bundle)
@@ -175,6 +186,7 @@ public class LocationFragment extends Fragment {
 		
 		// Save enabled state for reconstruction
 		outState.putSerializable(KEY_INDEX, _enabled_m);
+		outState.putBoolean(CHECKBOX_INDEX, mLocation.isImportant());
 		
 	}
 
@@ -200,6 +212,20 @@ public class LocationFragment extends Fragment {
 			_enabled_m = ((HashMap<Integer, Boolean>) savedInstanceState.getSerializable(KEY_INDEX));
 		}
 	}
+
+	/**
+	 * GETOBJECSSTATESFROMBUNDLEIFAVAILABLE - will take the object states that were saved in the
+	 * 		Bundle and apply them to the objects in the onCreateView.
+	 * @param savedInstanceState
+	 */
+	private void getObjectStatesFromBundleIfAvailable(Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+			if (savedInstanceState.containsKey(CHECKBOX_INDEX)) {
+				mLocation.setIsImportant(savedInstanceState.getBoolean(CHECKBOX_INDEX));
+			}
+		}
+	}
+
 	
 	/**
 	 * CLEARVIEW - will empty all fields of this view and delete field data from 
@@ -208,6 +234,7 @@ public class LocationFragment extends Fragment {
 	private void clear() {
 		mLocation.clear();  // Make sure the backing object rms field data
 		
+		mIsImportant.setChecked(false);  // Reset to false
 		mNameTextView.setText("");  // Clear all fields
 		mStreetTextView.setText("");
 		mUnitTextView.setText("");
@@ -251,17 +278,20 @@ public class LocationFragment extends Fragment {
 	private void setAbilityOnInteraction(View v) {
 		
 		if (v.getId() == R.id.location_address_clear_btn) {
+			mIsImportant.setEnabled(false);
 			mClearButton.setEnabled(false);  // Must type something to delete it.
 			mSaveButton.setEnabled(false);    // Cannot save a blank location.
 			mNextButton.setEnabled(false);
 		} else if (v.getId() == R.id.location_address_edit_btn) {	
 			// TODO: Have edit reset blinker to Name.
 			setFieldsEnabled(true);
+			mIsImportant.setEnabled(true);
 			mClearButton.setEnabled(true);
 			mEditButton.setEnabled(true);
 			mSaveButton.setEnabled(true);
 			mNextButton.setEnabled(false);  // Do not want to move until data set.
 		} else if (v.getId() == R.id.location_address_save_btn) {
+			mIsImportant.setEnabled(false);
 			mSaveButton.setEnabled(false);    // Nothing left to save, but can edit to reenable all
 			mClearButton.setEnabled(false);  // If you need delete after save, hit edit 1st
 			mNextButton.setEnabled(true);
@@ -282,6 +312,7 @@ public class LocationFragment extends Fragment {
 	 * @param isEnabled - tells whether all fields should be enabled or disabled.
 	 */
 	private void setFieldsEnabled(boolean isEnabled) {
+		mIsImportant.setEnabled(isEnabled);
 		mNameTextView.setEnabled(isEnabled);
 		mStreetTextView.setEnabled(isEnabled);
 		mUnitTextView.setEnabled(isEnabled);
@@ -339,6 +370,11 @@ public class LocationFragment extends Fragment {
 				Toast.makeText(getActivity(), "NEXT:\n" + mLocation.toString()
 						, Toast.LENGTH_SHORT).show();
 				
+			} else if (v.getId() == R.id.location_address_important) {
+				mLocation.setIsImportant( ((CheckBox) v).isChecked() );
+				
+				Toast.makeText(getActivity(), "STAR:\n" + mLocation.toString()
+						, Toast.LENGTH_SHORT).show();
 			}
 			
 		}

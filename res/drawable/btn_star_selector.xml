@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <!-- Enabled -->
+    <item 
+        android:state_checked="true" 
+        android:state_enabled="true" 
+        android:state_pressed="true" 
+        android:drawable="@drawable/btn_star_big_on_pressed" />
+    <item 
+        android:state_checked="false" 
+        android:state_enabled="true" 
+        android:state_pressed="true" 
+        android:drawable="@drawable/btn_star_big_off_pressed" />
+    <item 
+        android:state_checked="true" 
+        android:state_enabled="true" 
+        android:drawable="@drawable/btn_star_big_on" />
+    <item 
+        android:state_checked="false" 
+        android:state_enabled="true" 
+        android:drawable="@drawable/btn_star_big_off" />
+            
+    
+    <!-- Disabled -->
+    <item 
+        android:state_checked="true" 
+        android:state_enabled="false" 
+        android:drawable="@drawable/btn_star_big_on_disable" />
+    <item 
+        android:state_checked="false" 
+        android:state_enabled="false" 
+        android:drawable="@drawable/btn_star_big_off_disable" />
+    
+    
+    <!-- Default -->
+    <item 
+        android:state_checked="true" 
+        android:drawable="@drawable/btn_star_big_on" />
+    <item 
+        android:state_checked="false" 
+        android:drawable="@drawable/btn_star_big_off" />
+
+</selector>

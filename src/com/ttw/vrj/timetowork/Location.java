@@ -137,8 +137,8 @@ public class Location implements Serializable {
 		return mIsImportant;
 	}
 
-	public void setIsImportant(boolean mIsImportant) {
-		this.mIsImportant = mIsImportant;
+	public void setIsImportant(boolean isImportant) {
+		mIsImportant = isImportant;
 	}
 
 	/**
