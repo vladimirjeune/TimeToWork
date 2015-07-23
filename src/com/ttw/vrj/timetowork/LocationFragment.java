@@ -44,6 +44,7 @@ public class LocationFragment extends Fragment {
 	private EditText mCityTextView;
 	private Spinner mStateSpinnerView;
 	private EditText mZipcodeTextView;
+	private Spinner mCategorySpinnerView;
 	
 	// Buttons
 	private CheckBox mIsImportant;
@@ -60,7 +61,7 @@ public class LocationFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mLocation = new Location();
+		mLocation = new ImportantLocation();
 		viewList = new ArrayList<View>();  // Holds views for collection of state later
 		_enabled_m = null;
 	}
@@ -99,8 +100,12 @@ public class LocationFragment extends Fragment {
 		viewList.add(mZipcodeTextView);
 		
 		// Spinners
-		mStateSpinnerView = (Spinner) view.findViewById(R.id.location_address_state);
+		mStateSpinnerView = (Spinner) view
+				.findViewById(R.id.location_address_state);
 		viewList.add(mStateSpinnerView);
+		mCategorySpinnerView = (Spinner) view
+				.findViewById(R.id.location_address_category);
+		viewList.add(mCategorySpinnerView);
 		
 		// Buttons
 		mIsImportant = (CheckBox) view
@@ -132,28 +137,23 @@ public class LocationFragment extends Fragment {
 		ArrayAdapter<CharSequence> stateArrayAdapter = ArrayAdapter
 				.createFromResource(getActivity(), R.array.states_array
 						, android.R.layout.simple_spinner_item);
+
+		ArrayAdapter<CharSequence> categoryArrayAdapter = 
+				new ArrayAdapter<CharSequence>(getActivity(), 
+						android.R.layout.simple_spinner_item, 
+						mLocation.getCategories());  // Used CTOR
 		
 		// Layout to use for List of Choices
 		stateArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		categoryArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		
 		// Apply Adapter to Spinner
 		mStateSpinnerView.setAdapter(stateArrayAdapter);
+		mCategorySpinnerView.setAdapter(categoryArrayAdapter);
 		
 		// Setting Spinner Listener
-		mStateSpinnerView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				mLocation.setState((String) parent.getItemAtPosition(position) );
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				// Purposely left blank				
-			}
-			
-		});
+		mStateSpinnerView.setOnItemSelectedListener(new LocationViewItemSelectedListener());
+		mCategorySpinnerView.setOnItemSelectedListener(new LocationViewItemSelectedListener());
 		
 		
 		// Buttons
@@ -220,7 +220,7 @@ public class LocationFragment extends Fragment {
 	 */
 	private void getObjectStatesFromBundleIfAvailable(Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey(CHECKBOX_INDEX)) {
+			if (savedInstanceState.containsKey(CHECKBOX_INDEX)) {  // Get whether checked
 				mLocation.setIsImportant(savedInstanceState.getBoolean(CHECKBOX_INDEX));
 			}
 		}
@@ -241,6 +241,7 @@ public class LocationFragment extends Fragment {
 		mCityTextView.setText("");
 		mStateSpinnerView.setSelection(0);  // 0 should be empty.  Meaning no selection
 		mZipcodeTextView.setText("");
+		mCategorySpinnerView.setSelection(0);
 		
 	}
 	
@@ -319,6 +320,7 @@ public class LocationFragment extends Fragment {
 		mCityTextView.setEnabled(isEnabled);
 		mStateSpinnerView.setEnabled(isEnabled);
 		mZipcodeTextView.setEnabled(isEnabled);
+		mCategorySpinnerView.setEnabled(isEnabled);
 	}
 
 
@@ -332,6 +334,34 @@ public class LocationFragment extends Fragment {
 		clear();
 		setAbilityOnInteraction(v);
 	}
+
+	/**
+	 * LOCATIONVIEWITEMSELECTEDLISTENER - SelectedListener for all spinners in this
+	 * 		fragment
+	 *
+	 */
+	private class LocationViewItemSelectedListener implements
+			AdapterView.OnItemSelectedListener {
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view,
+				int position, long id) {
+
+			if (parent != null){  // For Spinner, parent is spinner, view is textView selected
+				if (parent.getId() == R.id.location_address_state) {
+					mLocation.setState((String) parent.getItemAtPosition(position) );
+				} else if (parent.getId() == R.id.location_address_category) {
+					mLocation.setCategory((String) parent.getItemAtPosition(position) );
+				}
+			}
+			
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			// Purposely left blank				
+		}
+	}
+
 
 	/**
 	 * LOCATIONVIEWCLICKLISTENER - ClickListener for all buttons in fragment

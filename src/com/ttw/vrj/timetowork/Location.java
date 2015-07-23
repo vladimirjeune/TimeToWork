@@ -4,6 +4,9 @@
 package com.ttw.vrj.timetowork;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -11,11 +14,10 @@ import java.util.UUID;
  * @author vladimirjeune
  *
  */
-public class Location implements Serializable {
+public abstract class Location implements Serializable {
 
-	// TODO: mCategory, rest of address stuff.
-	
 	private final UUID mId;
+
 	private boolean mIsImportant;  // Will default to false
 	private String mName="";
 	private String mStreet="";
@@ -24,11 +26,14 @@ public class Location implements Serializable {
 	private String mState="";
 	private String mZipcode="";
 	
+	private long mDate;
+	
 	/**
 	 * CONSTRUCTOR - 
 	 */
 	public Location() {
 		mId = UUID.randomUUID();
+		mDate = new Date().getTime();
 		setIsImportant(false);
 	}
 	
@@ -40,11 +45,12 @@ public class Location implements Serializable {
 		return getClass().getSimpleName() + ": [UID=\"" + mId 
 				+ "\", isStarred=\"" + mIsImportant 
 				+ "\", Name=\"" + mName 
-				+  "\",\nStreet=\"" + mStreet 
+				+ "\",\nStreet=\"" + mStreet 
 				+ "\", Unit=\"" + mUnit 
 				+ "\", City=\"" + mCity 
 				+ "\",\nState=\"" + mState
-				+ "\", Zipcode=\"" + mZipcode + "]" ;
+				+ "\", Zipcode=\"" + mZipcode
+				+ "\", Date=\"" + mDate + "\"]" ;
 	}
 
 	/**
@@ -58,11 +64,43 @@ public class Location implements Serializable {
 		mCity = "";
 		mState = "";
 		mZipcode = "";
+		mDate = 0L;
 			
 	}
 	
+	
+	/**
+	 * GETCATEGORIES - returns an ArrayList of the categories that describe this object 
+	 */
+	public abstract List<CharSequence> getCategories();
+	
+	/**
+	 * ADDCATEGORY - will add a category to the list of categories that describe this object
+	 * @param aCategory
+	 */
+	public abstract void addCategory(String aCategory);
+	
+	
+	
 	// TODO: Will have abstract() named Category.  Work(Work,Gym..), Home(Rental, Condo..)
 	
+	/**
+	 * @return the User chosen category for this object
+	 */
+	public abstract String getCategory();
+
+	/**
+	 * @param category the category to set this object to
+	 */
+	public abstract void setCategory(String category);
+
+	/**
+	 * @return the date as milliseconds.
+	 */
+	public long getDate() {
+		return mDate;
+	}
+
 	/**
 	 * GETLABEL - will return the label
 	 * @return the Label

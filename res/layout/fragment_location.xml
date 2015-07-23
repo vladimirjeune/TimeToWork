@@ -90,6 +90,19 @@
     <!-- it was necessary to place them in a LinearLayout with DEL telling -->
     <!-- its parent to place it left, and the other button's layout telling -->
     <!-- its children to go right -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Spinner
+            android:id="@+id/location_address_category"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
     <LinearLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
